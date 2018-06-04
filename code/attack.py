@@ -77,7 +77,7 @@ def prediction(image):
 
 # Returns the confidence of the network that the image is `digit`.
 def confidence(image, category):
-    return model.eval()(image)[0, category]
+    return model.eval()(image)[0, category].item()
 
 
 # Yields the indices of the first n wrong predictions.

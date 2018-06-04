@@ -142,7 +142,7 @@ def GDA(image, steps=500, p=2, lr=1e-3):
         # Prints results
         adv = attacker.forward(image)
         conf = confidence(adv, digit)
-        norm = (adv - image).norm(p)
+        norm = (adv - image).norm(p).item()
         print(f"Step {i:4} -- conf: {conf:0.4f}, L_{p}(r): {norm:0.20f}",
               end='\r')
         norms.append(norm)
@@ -272,31 +272,6 @@ def resistances_lists(images_list, steps=500):
     return (L_res_N, L_res_max, L_res_min)
 
 
-# ADVERSARIAL CORRECTIONS
-# -----------------------
-
-def labels_list(list):
-    return [load_label(i) for i in list]
-
-
-def pred_labels_list(list):
-    return [prediction(load_image(i)) for i in list]
-
-
-def corr_labels_list(list, steps):
-    return [prediction(attack_break(load_image(i), steps)[1]) for i in list]
-
-
-def error_count(labels, pred_labels, corr_labels, resistances, criterion):
-    errs = 0
-    for l, p, a, r in zip(labels, pred_labels, corr_labels, resistances):
-        if r > criterion:
-            errs += 1 * (p != l)
-        else:
-            errs += 1 * (a != l)
-    return errs
-
-
 # FOOLBOX PLAYGROUND
 # ------------------
 
@@ -365,7 +340,7 @@ def fb_attack(img_id, attack_name, p=0.1):
 def fb_attacks(size, attack_name, p=0.1):
     adv_list = []
     for img_id in not_errors():
-        if adv_list == size:
+        if len(adv_list) >= size:
             break
         adv = fb_attack(img_id, attack_name, p)
         if adv is not None:

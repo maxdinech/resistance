@@ -27,8 +27,8 @@ def load_model(dataset, model_name):
             from torch.serialization import SourceChangeWarning
             warnings.simplefilter('ignore', SourceChangeWarning)
             model = torch.load(path, map_location=lambda storage, loc: storage)
-        if torch.cuda.is_available():
-            model = model.cuda()
+        # if torch.cuda.is_available():
+        #     model = model.cuda()
         return model
     except FileNotFoundError:
         raise ValueError('No trained model found.')

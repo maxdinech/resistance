@@ -334,6 +334,7 @@ def fb_attack(img_id, attack_name, p=0.1):
         shutil.move("../results/latest/attack_result.png",
                     path + f"{img_id:04d}.png")
         torch.save(adv, path + f"{img_id:04d}.pt")
+        print("success")
         return adv
     except:
         print("failed")

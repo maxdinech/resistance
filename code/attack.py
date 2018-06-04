@@ -36,6 +36,9 @@ import data_loader
 import plot
 
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+
 # Parameters parsing
 parser = argparse.ArgumentParser()
 parser.add_argument("model", type=str, help="Trained model to evaluate")
@@ -308,7 +311,8 @@ import shutil
 
 
 fmodel = foolbox.models.PyTorchModel(model, (0, 1), num_classes=10,
-                                     channel_axis=1, cuda=False)
+                                     channel_axis=1,
+                                     cuda=torch.cuda.is_available())
 
 
 def fb_attack(img_id, attack_name, p=0.1):

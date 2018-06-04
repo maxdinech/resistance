@@ -12,7 +12,7 @@ import torch
 import architectures
 
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 def load_architecture(model_name):
@@ -30,7 +30,7 @@ def load_model(dataset, model_name):
             from torch.serialization import SourceChangeWarning
             warnings.simplefilter('ignore', SourceChangeWarning)
             model = torch.load(path, map_location=lambda storage, loc: storage)
-            model = model.to(device)
+            # model = model.to(device)
         return model
     except FileNotFoundError:
         raise ValueError('No trained model found.')

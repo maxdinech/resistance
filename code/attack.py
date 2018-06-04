@@ -322,18 +322,18 @@ def fb_attack(img_id, attack_name, p=0.1):
     img = load_image(img_id)
     img_pred = prediction(img)
     img_conf = confidence(img, img_pred)
-    np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
     try:
+        np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
         adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
         adv_pred = prediction(adv)
         adv_conf = confidence(adv, adv_pred)
-        plot.attack_result(model_name, 2,
-                           img, img_pred, img_conf,
-                           adv, adv_pred, adv_conf)
-        plt.close()
-        shutil.move("../results/latest/attack_result.png",
-                    path + f"{img_id:04d}.png")
-        torch.save(adv, path + f"{img_id:04d}.pt")
+        # plot.attack_result(model_name, 2,
+        #                    img, img_pred, img_conf,
+        #                    adv, adv_pred, adv_conf)
+        # plt.close()
+        # shutil.move("../results/latest/attack_result.png",
+        #             path + f"{img_id:04d}.png")
+        # torch.save(adv, path + f"{img_id:04d}.pt")
         print("success")
         return adv
     except:

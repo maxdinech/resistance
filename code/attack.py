@@ -345,7 +345,7 @@ def fb_attacks(size, attack_name, p=0.1):
     for img_id in not_errors():
         if len(adv_list) >= size or img_id >= 10000:
             break
-        print(img_id, end='\r')
+        print(len(adv_list), "/", img_id, end='\r')
         adv = fb_attack(img_id, attack_name, p)
         if adv is not None:
             adv_list.append(adv)

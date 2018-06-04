@@ -62,7 +62,7 @@ images, labels = data_loader.test(dataset_name, None)
 
 # Loads the #img_id image from the test database.
 def load_image(img_id):
-    return images[img_id].view(1, 1, 28, 28)
+    return images[img_id].view(1, 1, 28, 28).to(device)
 
 
 # Loads the #img_id label from the test database.

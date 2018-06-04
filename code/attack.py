@@ -317,8 +317,8 @@ def fb_attack(img_id, attack_name, p=0.1):
     path = f"../results/{dataset_name}/{attack_name}/"
     if not os.path.exists(path):
         os.mkdir(path)
-    # criterion = foolbox.criteria.OriginalClassProbability(p)
-    attack = getattr(foolbox.attacks, attack_name)(fmodel)
+    criterion = foolbox.criteria.OriginalClassProbability(p)
+    attack = getattr(foolbox.attacks, attack_name)(fmodel, criterion)
     img = load_image(img_id)
     img_pred = prediction(img)
     img_conf = confidence(img, img_pred)

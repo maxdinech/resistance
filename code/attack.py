@@ -60,19 +60,24 @@ images, labels = data_loader.test(dataset_name, None)
 # BASIC FUNCTIONS
 # ---------------
 
-# Loads the #img_id image from the test database.
+# Loads the #img_id image from the test database (torch.Tensor).
 def load_image(img_id):
     return images[img_id].view(1, 1, 28, 28)  # .to(device)
 
 
-# Loads the #img_id label from the test database.
+# Loads the #img_id label from the test database (int).
 def load_label(img_id):
     return labels[img_id].item()
 
 
-# Returns the label prediction of an image.
+# Returns the label prediction of an image (float).
 def prediction(image):
     return model.eval()(image).max(1)[1].item()
+
+
+# Returns the predictions of of the network on an image (ndarray).
+def predictions(image):
+    return model.eval()(image).data[0].numpy()
 
 
 # Returns the confidence of the network that the image is `digit`.
@@ -313,34 +318,41 @@ fmodel = foolbox.models.PyTorchModel(model, (0, 1), num_classes=10,
                                      cuda=False)
 
 
-def fb_attack(img_id, attack_name, p=0.1):
+def fb_attack(img_id, attack_name, p=0.95):
     path = f"../results/{dataset_name}/{attack_name}/"
     if not os.path.exists(path):
         os.mkdir(path)
-    criterion = foolbox.criteria.OriginalClassProbability(p)
-    attack = getattr(foolbox.attacks, attack_name)(fmodel, criterion)
     img = load_image(img_id)
     img_pred = prediction(img)
     img_conf = confidence(img, img_pred)
     try:
+        # Finds an adversarial example
+        attack = getattr(foolbox.attacks, attack_name)(fmodel)
         np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
         adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
         adv_pred = prediction(adv)
+        
+        # Increases its classification probability above p
+        criterion = foolbox.criteria.TargetClassProbability(adv_pred, p)
+        attack = getattr(foolbox.attacks, attack_name)(fmodel, criterion)
+        np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
+        adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
+        adv_pred = prediction(adv)
+        print(f"adv conf above {p}")
         adv_conf = confidence(adv, adv_pred)
         # plot.attack_result(model_name, 2,
         #                    img, img_pred, img_conf,
         #                    adv, adv_pred, adv_conf)
-        # plt.close()
+        # plt.show()
         # shutil.move("../results/latest/attack_result.png",
         #             path + f"{img_id:04d}.png")
         # torch.save(adv, path + f"{img_id:04d}.pt")
-        print("success")
-        return adv
     except:
-        print("failed")
+        pass
+    return adv
 
 
-def fb_attacks(size, attack_name, p=0.1):
+def fb_attacks(size, attack_name, p=0.95):
     adv_list = []
     for img_id in not_errors():
         if len(adv_list) >= size or img_id >= 10000:

@@ -270,11 +270,14 @@ def resistances_3(image, steps=500):
 
 def resistances_lists(images_list, steps=500):
     L_res_N, L_res_max, L_res_min = [], [], []
+    i, l = 1, len(list)
     for image in images_list:
+        print(f"{i}/{l} : ")
         res_N, res_max, res_min = resistances_3(image, steps)
         L_res_N += [res_N]
         L_res_max += [res_max]
         L_res_min += [res_min]
+        i += 1
     return (L_res_N, L_res_max, L_res_min)
 
 

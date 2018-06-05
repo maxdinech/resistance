@@ -50,7 +50,7 @@ dataset_name = args.dataset
 
 
 # Loads the model
-model = load_model(dataset_name, model_name)
+model = load_model(dataset_name, model_name).to(device)
 
 
 # Loads the specified subset from the specified database

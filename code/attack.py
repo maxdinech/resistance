@@ -36,7 +36,7 @@ import data_loader
 import plot
 
 
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # Parameters parsing
@@ -62,7 +62,7 @@ images, labels = data_loader.test(dataset_name, None)
 
 # Loads the #img_id image from the test database (torch.Tensor).
 def load_image(img_id):
-    return images[img_id].view(1, 1, 28, 28)  # .to(device)
+    return images[img_id].view(1, 1, 28, 28).to(device)
 
 
 # Loads the #img_id label from the test database (int).
@@ -138,7 +138,7 @@ def GDA(image, steps=500, p=2, lr=1e-3):
     norms, confs = [], []
     digit = prediction(image)
     attacker = Attacker(p, lr)
-    # attacker = attacker.to(device)
+    attacker = attacker.to(device)
     optim = attacker.optimizer
     for i in range(steps):
         # Training step
@@ -163,7 +163,7 @@ def GDA_break(image, max_steps=500, p=2, lr=1e-3):
     norms, confs = [], []
     digit = prediction(image)
     attacker = Attacker(p, lr)
-    # attacker = attacker.to(device)
+    attacker = attacker.to(device)
     optim = attacker.optimizer
     adv = attacker.forward(image)
     steps = 0
@@ -318,7 +318,7 @@ import shutil
 
 fmodel = foolbox.models.PyTorchModel(model, (0, 1), num_classes=10,
                                      channel_axis=1,
-                                     cuda=False)
+                                     cuda=True)
 
 
 def fb_attack(img_id, attack_name, p=0.95):

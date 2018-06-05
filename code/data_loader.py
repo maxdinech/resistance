@@ -10,7 +10,7 @@ import torch
 from torchvision import datasets, transforms
 
 
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # Creates `train.pt` and `test.pt` from the specified dataset.
@@ -52,8 +52,8 @@ def load(dataset, subset, num_elements=None):
             labels = labels[:num_elements].clone()
         images = images.float() / 255
         labels = labels.long()
-        # images = images.to(device)
-        # labels = labels.to(device)
+        images = images.to(device)
+        labels = labels.to(device)
         images = images.view(len(images), 1, 28, 28)  # Channels first
         return images, labels
     else:

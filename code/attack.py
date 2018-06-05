@@ -347,9 +347,9 @@ def fb_attack(img_id, attack_name, p=0.95):
         # shutil.move("../results/latest/attack_result.png",
         #             path + f"{img_id:04d}.png")
         # torch.save(adv, path + f"{img_id:04d}.pt")
+        return adv
     except:
         pass
-    return adv
 
 
 def fb_attacks(size, attack_name, p=0.95):

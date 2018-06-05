@@ -350,6 +350,8 @@ def fb_attack(img_id, attack_name, p=0.95):
         #             path + f"{img_id:04d}.png")
         # torch.save(adv, path + f"{img_id:04d}.pt")
         return adv
+    except KeyboardInterrupt:
+        1/0
     except:
         pass
 

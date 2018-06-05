@@ -331,14 +331,14 @@ def fb_attack(img_id, attack_name, p=0.95):
     # Finds an adversarial example
     attack = getattr(foolbox.attacks, attack_name)(fmodel)
     np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
-    adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
+    adv = torch.Tensor(np_adv).view(1, 1, 28, 28).to(device)
     adv_pred = prediction(adv)
     
     # Increases its classification probability above p
     criterion = foolbox.criteria.TargetClassProbability(adv_pred, p)
     attack = getattr(foolbox.attacks, attack_name)(fmodel, criterion)
     np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
-    adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
+    adv = torch.Tensor(np_adv).view(1, 1, 28, 28).to(device)
     adv_pred = prediction(adv)
     adv_conf = confidence(adv, adv_pred)
     # plot.attack_result(model_name, 2,

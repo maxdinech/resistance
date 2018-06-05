@@ -328,32 +328,27 @@ def fb_attack(img_id, attack_name, p=0.95):
     img = load_image(img_id)
     img_pred = prediction(img)
     img_conf = confidence(img, img_pred)
-    try:
-        # Finds an adversarial example
-        attack = getattr(foolbox.attacks, attack_name)(fmodel)
-        np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
-        adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
-        adv_pred = prediction(adv)
-        
-        # Increases its classification probability above p
-        criterion = foolbox.criteria.TargetClassProbability(adv_pred, p)
-        attack = getattr(foolbox.attacks, attack_name)(fmodel, criterion)
-        np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
-        adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
-        adv_pred = prediction(adv)
-        adv_conf = confidence(adv, adv_pred)
-        # plot.attack_result(model_name, 2,
-        #                    img, img_pred, img_conf,
-        #                    adv, adv_pred, adv_conf)
-        # plt.show()
-        # shutil.move("../results/latest/attack_result.png",
-        #             path + f"{img_id:04d}.png")
-        # torch.save(adv, path + f"{img_id:04d}.pt")
-        return adv
-    except KeyboardInterrupt:
-        1/0
-    except:
-        pass
+    # Finds an adversarial example
+    attack = getattr(foolbox.attacks, attack_name)(fmodel)
+    np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
+    adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
+    adv_pred = prediction(adv)
+    
+    # Increases its classification probability above p
+    criterion = foolbox.criteria.TargetClassProbability(adv_pred, p)
+    attack = getattr(foolbox.attacks, attack_name)(fmodel, criterion)
+    np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
+    adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
+    adv_pred = prediction(adv)
+    adv_conf = confidence(adv, adv_pred)
+    # plot.attack_result(model_name, 2,
+    #                    img, img_pred, img_conf,
+    #                    adv, adv_pred, adv_conf)
+    # plt.show()
+    # shutil.move("../results/latest/attack_result.png",
+    #             path + f"{img_id:04d}.png")
+    # torch.save(adv, path + f"{img_id:04d}.pt")
+    return adv
 
 
 def fb_attacks(size, attack_name, p=0.95):

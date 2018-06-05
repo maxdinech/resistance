@@ -338,7 +338,6 @@ def fb_attack(img_id, attack_name, p=0.95):
         np_adv = attack(np.array(img).reshape(1, 28, 28), img_pred)
         adv = torch.Tensor(np_adv).view(1, 1, 28, 28)
         adv_pred = prediction(adv)
-        print(f"adv conf above {p}")
         adv_conf = confidence(adv, adv_pred)
         # plot.attack_result(model_name, 2,
         #                    img, img_pred, img_conf,

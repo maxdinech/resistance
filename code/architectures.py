@@ -4,7 +4,7 @@ Network architectures.
 Default hyperparemeters (learning rate, number of epochs, batch size,
 optimizer) are included in the definition of the architectures for more
 flexibility.
- """
+"""
 
 
 import torch

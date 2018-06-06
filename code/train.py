@@ -40,6 +40,9 @@ import data_loader
 import plot
 
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+
 # Parameters parsing
 parser = argparse.ArgumentParser()
 parser.add_argument("model", type=str,

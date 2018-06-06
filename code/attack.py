@@ -270,7 +270,7 @@ def resistances_3(image, steps=500):
 
 def resistances_lists(images_list, steps=500):
     L_res_N, L_res_max, L_res_min = [], [], []
-    i, l = 1, len(list)
+    i, l = 1, len(images_list)
     for image in images_list:
         print(f"{i}/{l} : ")
         res_N, res_max, res_min = resistances_3(image, steps)
@@ -342,13 +342,12 @@ def fb_attack(img_id, attack_name, p=0.95):
         adv = torch.Tensor(np_adv).view(1, 1, 28, 28).to(device)
         adv_pred = prediction(adv)
         adv_conf = confidence(adv, adv_pred)
-        # plot.attack_result(model_name, 2,
-        #                    img, img_pred, img_conf,
-        #                    adv, adv_pred, adv_conf)
-        # plt.show()
-        # shutil.move("../results/latest/attack_result.png",
-        #             path + f"{img_id:04d}.png")
-        # torch.save(adv, path + f"{img_id:04d}.pt")
+        plot.attack_result(model_name, 2,
+                           img, img_pred, img_conf,
+                           adv, adv_pred, adv_conf)
+        shutil.move("../results/latest/attack_result.png",
+                    path + f"{img_id:04d}.png")
+        torch.save(adv, path + f"{img_id:04d}.pt")
         return adv
     except KeyboardInterrupt:
         1/0

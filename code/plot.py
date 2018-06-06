@@ -52,13 +52,13 @@ def attack_result(model_name, p,
 
 
 # Plots the history of a model training
-def train_history(train_accs, test_accs):
+def train_history(train_accs, val_accs):
     rcParams['font.size'] = 12
     t = list(range(len(train_accs)))
     plt.plot(t, train_accs, 'r')
-    plt.plot(t, test_accs, 'b')
+    plt.plot(t, val_accs, 'b')
     plt.title("Network training history")
-    plt.legend(["train accuracy", "test accuracy"])
+    plt.legend(["train accuracy", "val accuracy"])
 
 
 # Plots the history of an attack
